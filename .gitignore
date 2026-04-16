@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.env
+venv/
+.venv/
+env/
+python_env/
+backend/chroma_db/
+backend/db.sqlite3
+capture.py
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+backend/.env
+frontend/.env
+frontend/.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
