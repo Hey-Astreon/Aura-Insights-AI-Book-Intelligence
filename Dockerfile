@@ -49,14 +49,14 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file into the container
-COPY requirements.txt /app/
+# Copy the requirements file from the backend folder
+COPY backend/requirements.txt /app/
 
 # Install Python dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the rest of the backend code
-COPY . /app/
+COPY backend/ /app/
 
 # Collect static files
 RUN python manage.py collectstatic --no-input

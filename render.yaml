@@ -2,7 +2,7 @@ services:
   - type: web
     name: aura-insights-backend
     env: docker
-    dockerContext: backend
+    dockerContext: .
     dockerfilePath: Dockerfile
     plan: free
     region: ohio
@@ -12,7 +12,7 @@ services:
       - key: ALLOWED_HOSTS
         value: "*"
       - key: OPENROUTER_API_KEY
-        sync: false # This tells Render to ask the user for the value
+        sync: false
       - key: RECOMMENDED_MODEL
         value: "anthropic/claude-3.5-sonnet"
     autoDeploy: true
