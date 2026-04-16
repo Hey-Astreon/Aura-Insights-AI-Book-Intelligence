@@ -1,37 +1,40 @@
-# Use the most stable Python version for cloud environments
-FROM python:3.11-slim
+# Use stable Python 3.11
+FROM python:3.11-slim-bookworm
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DEBUG=False
 
-# Install only the absolute essential system tools for Chrome
+# Install basic tools and dependencies for Chrome
+# We install these first to ensure the .deb installer has everything it needs
 RUN apt-get update && apt-get install -y \
     wget \
-    gnupg \
     curl \
-    unzip \
+    gnupg \
+    libnss3 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libasound2 \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+# Install Google Chrome using the DIRECT .deb method (Fastest & Most Reliable)
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    && apt-get install -y ./google-chrome-stable_current_amd64.deb \
+    && rm google-chrome-stable_current_amd64.deb \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
 
-# Copy and install Python requirements
-# We use the CPU version of Torch to save memory and time
+# Copy and install requirements (CPU version for speed)
 COPY backend/requirements.txt /app/
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy the backend code
+# Copy backend code
 COPY backend/ /app/
 
 # Collect static files
@@ -40,5 +43,5 @@ RUN python manage.py collectstatic --no-input
 # Expose port
 EXPOSE 8000
 
-# Start Gunicorn
+# Start Service
 CMD ["sh", "-c", "python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:8000"]
