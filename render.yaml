@@ -1,8 +1,8 @@
 services:
   - type: web
     name: aura-insights-backend
-    env: docker # Changed from python to docker
-    dockerContext: backend # Points to the backend folder
+    env: docker
+    dockerContext: backend
     dockerfilePath: Dockerfile
     plan: free
     region: ohio
@@ -10,9 +10,9 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: ".onrender.com"
+        value: "*"
       - key: OPENROUTER_API_KEY
-        fromContext: envVar # Will take it from Render dashboard settings
+        sync: false # This tells Render to ask the user for the value
       - key: RECOMMENDED_MODEL
         value: "anthropic/claude-3.5-sonnet"
     autoDeploy: true
