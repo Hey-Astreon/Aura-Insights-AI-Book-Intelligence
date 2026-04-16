@@ -1,0 +1,20 @@
+# Ignore Frontend (it's deployed separately)
+frontend/
+node_modules/
+.next/
+
+# Ignore Documentation & git
+docs/
+.git/
+.gitignore
+*.md
+
+# Ignore Python cruise control
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+.env
+venv/
+env/

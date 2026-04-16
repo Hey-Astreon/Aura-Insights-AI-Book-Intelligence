@@ -5,7 +5,6 @@ services:
     dockerContext: .
     dockerfilePath: Dockerfile
     plan: free
-    region: ohio
     envVars:
       - key: DEBUG
         value: "False"
