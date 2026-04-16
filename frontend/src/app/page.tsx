@@ -20,6 +20,8 @@ export default function Home() {
     fetchBooks();
   }, []);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
   /**
    * Fetches the book list from the Django backend.
    * Includes fallback to demo data to ensure a smooth UI during environment setup.
@@ -27,7 +29,7 @@ export default function Home() {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/api/books/");
+      const res = await fetch(`${API_URL}/api/books/`);
       if (res.ok) {
         const data = await res.json();
         setBooks(data);
@@ -52,7 +54,7 @@ export default function Home() {
   const handleSync = async () => {
     setSyncing(true);
     try {
-      await fetch("http://localhost:8000/api/books/upload/", { method: "POST" });
+      await fetch(`${API_URL}/api/books/upload/`, { method: "POST" });
       fetchBooks();
     } catch (e) {
       // Simulate sync duration for UI demonstration if backend is disconnected

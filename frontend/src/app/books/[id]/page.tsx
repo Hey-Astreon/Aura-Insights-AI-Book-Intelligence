@@ -16,10 +16,11 @@ export default function BookDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
     // Fetch individual book details from the API
     const fetchDetail = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/books/${params.id}/`);
+        const res = await fetch(`${API_URL}/api/books/${params.id}/`);
         if (res.ok) {
           const data = await res.json();
           setBook(data);

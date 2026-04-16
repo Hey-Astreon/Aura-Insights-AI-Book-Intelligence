@@ -26,11 +26,13 @@ export default function ChatPage() {
   const [initializing, setInitializing] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
   // Load history from backend on mount
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/chat/");
+        const res = await fetch(`${API_URL}/api/chat/`);
         if (res.ok) {
           const data = await res.json();
           if (data.length > 0) {
@@ -66,7 +68,7 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/api/books/query/", {
+      const res = await fetch(`${API_URL}/api/books/query/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: userMsg })
