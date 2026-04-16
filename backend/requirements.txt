@@ -1,21 +1,21 @@
-# Base (Stable Versions)
-django==5.1.2
-djangorestframework==3.15.2
-django-cors-headers==4.5.0
-python-dotenv==1.0.1
-requests==2.32.3
-gunicorn==23.0.0
-whitenoise==6.7.0
+# Base
+django
+djangorestframework
+django-cors-headers
+python-dotenv
+requests
+gunicorn
+whitenoise
 
 # Scraper
-selenium==4.25.0
-webdriver-manager==4.0.2
+selenium
+webdriver-manager
 
-# Intelligence (Confirmed CPU Versions)
---index-url https://download.pytorch.org/whl/cpu
-torch==2.4.1+cpu
-transformers==4.45.2
-sentence-transformers==3.2.1
+# Intelligence (Hyper-Simplified for Cloud)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+transformers
+sentence-transformers
 
-# Database / Vector
-chromadb==0.5.15
+# Database
+chromadb
