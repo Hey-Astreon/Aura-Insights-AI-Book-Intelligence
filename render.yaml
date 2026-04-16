@@ -1,20 +1,18 @@
 services:
   - type: web
     name: aura-insights-backend
-    env: python
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn core.wsgi:application"
+    env: docker # Changed from python to docker
+    dockerContext: backend # Points to the backend folder
+    dockerfilePath: Dockerfile
+    plan: free
+    region: ohio
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.14.0
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
-      - key: DATABASE_URL
-        value: sqlite:///db.sqlite3 # Using persistent disk or internal for now
-    # This is how we tell Render to include Chrome
-    plan: free
-    region: ohio
-    # For Selenium on Render, we use a custom Dockerfile if we want it to be 100% stable
-    # But let's try the script first.
+      - key: OPENROUTER_API_KEY
+        fromContext: envVar # Will take it from Render dashboard settings
+      - key: RECOMMENDED_MODEL
+        value: "anthropic/claude-3.5-sonnet"
+    autoDeploy: true
