@@ -43,5 +43,5 @@ RUN python manage.py collectstatic --no-input
 # Expose port
 EXPOSE 8000
 
-# Start Service
-CMD ["sh", "-c", "python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:8000"]
+# Start Service (Optimized for 512MB RAM)
+CMD ["sh", "-c", "python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 1 --threads 4 --timeout 120 --worker-tmp-dir /dev/shm"]

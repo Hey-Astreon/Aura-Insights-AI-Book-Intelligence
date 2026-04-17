@@ -1,8 +1,7 @@
 import os
 import json
 import chromadb
-from chromadb.utils import embedding_functions
-from sentence_transformers import SentenceTransformer
+# AI imports moved to lazy loaders in RAGService to save RAM
 import requests
 from django.conf import settings
 from ..models import Book, BookChunk
@@ -70,8 +69,22 @@ class RAGService:
     def __init__(self):
         # Initialize local vector database
         self.chroma_client = chromadb.PersistentClient(path="./chroma_db")
-        self.embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-        self.collection = self.chroma_client.get_or_create_collection(
+        self._embedding_fn = None
+
+    @property
+    def embedding_fn(self):
+        """Lazy loader for the embedding model to save RAM on startup."""
+        if self._embedding_fn is None:
+            from chromadb.utils import embedding_functions
+            self._embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name="all-MiniLM-L6-v2"
+            )
+        return self._embedding_fn
+
+    @property
+    def collection(self):
+        """Lazy-loaded collection with the lazy embedding function."""
+        return self.chroma_client.get_or_create_collection(
             name="book_insights",
             embedding_function=self.embedding_fn
         )
